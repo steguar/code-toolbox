@@ -161,7 +161,7 @@ This app packages the output folder as a **ZIP** for download.
         tmp_out = ensure_tmp_dir(out_name)
 
         cmd = [
-            sys.executable, str(gen_script),
+            sys.executable, "-u", str(gen_script),
             "-N", str(int(N)),
             "-k", str(int(avgk)),
             "-g", str(float(gamma)),
@@ -241,11 +241,12 @@ This app packages the output folder as a **ZIP** for download.
             st.code(" ".join(cmd), language="bash")
             start = time.time()
             try:
+                st.write("Executable:", sys.executable)
                 completed = subprocess.run(
                     cmd,
                     cwd=str(BASE_DIR),
-                    # capture_output=True,
-                    # text=True,
+                    capture_output=True,
+                    text=True,
                     # check=True
                 )
                 elapsed = time.time() - start
