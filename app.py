@@ -18,7 +18,7 @@ sys.path.append(str(BASE_DIR / "epidemic"))
 sys.path.append(str(BASE_DIR / "opinion"))
 
 from multi_type_epidemic import MultiTypeEpidemic
-from opinion_dynamics import Simulation as OpinionSimulation
+from opinion_dynamics import Simulation as OpinionSimulation, plot_results
 
 
 # -----------------------------------------------------------------------------
@@ -493,5 +493,5 @@ else:
     if st.button("Run opinion simulation"):
         sim = OpinionSimulation(config)
         results = sim.run()
-        fig = sim.plot_results(results)
+        fig = plot_results(results)
         st.pyplot(fig, clear_figure=True)
