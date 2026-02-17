@@ -1,0 +1,57 @@
+{
+  "input_files": {
+    "nodes_file": "input/node_list.txt",
+    "edges_file": "input/edge_list_0_0.txt"
+  },
+
+  "simulation": {
+    "n_steps": 800,
+    "dt": 0.1,
+    "seed": 42
+  },
+  
+  "initial_conditions": {
+    "opinions_by_community": {
+      "0": {"mean": -0.4, "std": 0.25},
+      "1": {"mean": -0.2, "std": 0.20},
+      "2": {"mean":  0.0, "std": 0.15},
+      "3": {"mean":  0.2, "std": 0.25},
+      "4": {"mean":  0.7, "std": 0.15}
+    },
+  "clip_opinions_to": [-1.0, 1.0]
+  },
+
+  "opinion_dynamics": {
+    "alpha_social": 0.0,
+    "alpha_community": 1.0
+  },
+
+  "external_effect": {
+    "mode": 1,
+    "alpha_R": 0.8,
+    "p": 2
+  },
+
+  "risk_perception": {
+    "delay_steps": 20,
+    "tau": 5.0
+  },
+
+  "media_bias": {
+    "a": 0.4,
+    "g_threshold": 0.0005
+  },
+
+  "epidemic_model": {
+    "type": "SIR",
+    "parameters": {
+      "beta": 0.4,
+      "mu": 0.1,
+      "S0": 0.99,
+      "I0": 0.01,
+      "R0": 0.0
+    }
+  }
+}
+
+

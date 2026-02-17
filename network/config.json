@@ -1,0 +1,28 @@
+{
+  "mode": "generate", 
+  "output_folder": "generated_network",
+
+  "generate": {
+    "N": 1000,
+    "avgk": 10,
+    "gamma": 2.5,
+    "communities": 3,
+    "assortativity": 0.5,
+    "order_decay": 1.0,
+    "beta": 2.0,
+    "n_runs": 1,
+    "n_graphs": 1,
+    "fast": false
+  },
+
+  "randomize": {
+    "input_graph": "input.graphml",
+    "membership_attribute": "community",
+    "communities": null,
+    "beta": 2.0,
+    "n_runs": 1,
+    "n_graphs": 1,
+    "fast": false
+  }
+}
+
