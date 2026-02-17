@@ -25,7 +25,7 @@ packaging==25.0
 pandas==2.3.3
 pillow==11.3.0
 protobuf==6.33.5
-psutil=7.0.0
+psutil==7.0.0
 pyarrow==23.0.1
 pydeck==0.9.1
 pyparsing==3.2.3
