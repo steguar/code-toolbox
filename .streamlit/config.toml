@@ -1,7 +1,0 @@
-[server]
-# These settings make embedding and cross-origin use easier in many deployments.
-enableCORS = false
-enableXsrfProtection = true
-
-[browser]
-gatherUsageStats = false
