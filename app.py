@@ -244,9 +244,9 @@ This app packages the output folder as a **ZIP** for download.
                 completed = subprocess.run(
                     cmd,
                     cwd=str(BASE_DIR),
-                    capture_output=True,
-                    text=True,
-                    check=True
+                    # capture_output=True,
+                    # text=True,
+                    # check=True
                 )
                 elapsed = time.time() - start
                 st.success(f"Done in {elapsed:.2f}s")
