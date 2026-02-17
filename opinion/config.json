@@ -1,7 +1,7 @@
 {
   "input_files": {
-    "nodes_file": "input/node_list.txt",
-    "edges_file": "input/edge_list_0_0.txt"
+    "nodes_file": "opinion/input/node_list.txt",
+    "edges_file": "opinion/input/edge_list_0_0.txt"
   },
 
   "simulation": {
