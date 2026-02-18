@@ -173,6 +173,13 @@ This app packages the output folder as a **ZIP** for download.
             "--n_graphs", str(int(n_graphs)),
             "-o", str(tmp_out),
         ]
+        cmd = [
+        sys.executable,
+        "-u",
+        "-c",
+        "import time; print('start', flush=True); time.sleep(2); print('end', flush=True)"
+        ]
+
         if fast:
             cmd.append("-f")
         if dump_p:
