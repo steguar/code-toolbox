@@ -50,6 +50,8 @@ if __name__ == "__main__":
     parser.add_argument('--n_graphs', type=int, default=10, help='number of synthetic graphs to generate')
     parser.add_argument('--dump_p', action='store_true', help='whether to dump the probability matrix; with this option, n_graphs is ignored')
     args = parser.parse_args()
+    print(args, flush=True)
+
     ###############################################
     N = args.size
     avg_deg = args.avgk
