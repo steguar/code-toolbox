@@ -35,6 +35,14 @@ logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
+    parser.add_argument("-N", type=int)
+    args = parser.parse_args()
+
+    print("ARGS:", args, flush=True)
+    time.sleep(2)
+    print("DONE", flush=True)
+
+    parser = argparse.ArgumentParser()
     parser.add_argument('-N', '--size', type=int, default=1000, help='network size')
     parser.add_argument('-k', '--avgk', type=int, default=10, help='average degree')
     parser.add_argument('-g', '--gamma', type=float, default=2.5, help='exponent of the degree distribution')
