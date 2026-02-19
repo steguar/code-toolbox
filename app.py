@@ -19,7 +19,7 @@ sys.path.append(str(BASE_DIR / "network" / "geometric_block_model" / "src" / "rh
 from multi_type_epidemic import MultiTypeEpidemic
 from opinion_dynamics import Simulation as OpinionSimulation
 from rhbm_generate import run_rhbm_generate
-from rhbm_randomize_mod import run_rhbm_randomize
+from rhbm_randomize import run_rhbm_randomize
 
 
 def zip_folder(folder_path: Path, zip_path: Path):
