@@ -65,17 +65,21 @@ if module == "Network generation":
         start = time.time()
 
         run_rhbm_generate(
-            size=N,
-            avgk=avgk,
+            N=N,
+            avg_deg=avgk,
             gamma=gamma,
-            communities=communities,
-            assortativity=assortativity,
-            order_decay=order_decay,
-            output=str(tmp_out),
+            n=communities,
+            bs_file=None,
+            delta_file=None,
+            rho=assortativity,
+            q=order_decay,
+            output_folder=str(tmp_out),
             beta=beta,
             fast=fast,
-            n_runs=n_runs,
-            n_graphs=n_graphs
+            iters=n_runs,
+            n_graphs=n_graphs,
+            dump_p=False,
+            logger=None
         )
 
         st.success(f"Completed in {time.time() - start:.2f}s")
