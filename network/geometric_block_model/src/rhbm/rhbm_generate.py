@@ -15,6 +15,7 @@ You should have received a copy of the GNU General Public License along with RHB
 import numpy as np
 np.set_printoptions(suppress=True)
 import os
+import sys
 import argparse
 from rhbm_lib import generate_matrix, read_matrix, generate, save_data, get_block_sizes, get_node_list
 import logging
@@ -32,6 +33,108 @@ class TqdmLoggingHandler(logging.Handler):
 
 logger = logging.getLogger(__name__)
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s', datefmt='%H:%M:%S')
+
+def run_rhbm_generate(
+    *,
+    size: int = 1000,
+    avgk: int = 10,
+    gamma: float = 2.5,
+    communities: int = 5,
+    sizes: str | None = None,
+    delta: str | None = None,
+    assortativity: float = 0.5,
+    order_decay: float = 1.0,
+    output: str = "rhbm_output",
+    beta: float = 2.0,
+    fast: bool = False,
+    n_runs: int = 1,
+    n_graphs: int = 10,
+    dump_p: bool = False,
+    log_to_stdout: bool = True,
+):
+    """
+    Programmatic interface for RHBM generation.
+
+    This function replicates exactly the CLI logic in this file, but without argparse,
+    so it can be imported and called directly (e.g., from Streamlit) without subprocess.
+
+    Parameters match CLI flags:
+    - size (-N), avgk (-k), gamma (-g), communities (-n)
+    - sizes (-s): path to community sizes file (optional)
+    - delta (-d): path to mixing matrix file (optional)
+      If delta is None -> delta matrix is generated via generate_matrix(n, rho, q)
+    - assortativity (-p) and order_decay (-q) are used only when delta is None
+    - output (-o): output folder path (must be writable)
+    - beta (-b), fast (-f), n_runs (--n_runs), n_graphs (--n_graphs), dump_p (--dump_p)
+    - log_to_stdout: if True, route logging to stdout (useful in Streamlit)
+    """
+
+    # ---- configure logger (avoid Streamlit stderr split; send to stdout) ----
+    local_logger = logging.getLogger(__name__)
+    local_logger.setLevel(logging.INFO)
+
+    # prevent duplicated handlers if Streamlit reruns
+    local_logger.handlers = []
+    local_logger.propagate = False
+
+    handler_stream = sys.stdout if log_to_stdout else sys.stderr
+    h = logging.StreamHandler(handler_stream)
+    h.setLevel(logging.INFO)
+    fmt = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s', datefmt='%H:%M:%S')
+    h.setFormatter(fmt)
+    local_logger.addHandler(h)
+
+    # ---- replicate CLI logic exactly ----
+    N = size
+    avg_deg = avgk
+    n = communities
+    bs_file = sizes
+    delta_file = delta
+    rho = assortativity
+    q = order_decay
+
+    block_sizes = get_block_sizes(bs_file, N, local_logger)
+
+    if delta_file is None:
+        delta_matrix = generate_matrix(n, rho, q)
+    else:
+        delta_matrix = read_matrix(delta_file)
+        rho = None
+        q = None
+
+    output_folder = output
+    adjust_features = not fast
+    iters = n_runs
+
+    # ---- output folder ----
+    if not os.path.exists(output_folder):
+        os.makedirs(output_folder, exist_ok=True)
+        local_logger.info(f"Created output directory: {output_folder}")
+
+    # info.csv
+    with open(os.path.join(output_folder, 'info.csv'), 'w') as fout:
+        print('N,beta,gamma,k,n,rho,q,runs,n_graphs', file=fout)
+        print(f'{N},{beta},{gamma},{avg_deg},{n},{rho},{q},{iters},{n_graphs}', file=fout)
+
+    # node_list
+    node_list = get_node_list(block_sizes)
+    save_data('node_list.txt', output_folder, node_list, fmt='%d')
+    local_logger.info('node list with membership dumped')
+
+    # run generator
+    start_time = time.time()
+    generate(
+        N, beta, avg_deg, gamma,
+        delta_matrix, block_sizes,
+        adjust_features, iters,
+        output_folder, dump_p, n_graphs,
+        logger=local_logger
+    )
+    end_time = time.time()
+    local_logger.info(f"Total time for {iters} runs: {end_time - start_time:.2f} seconds.")
+
+    return output_folder
+
 
 if __name__ == "__main__":
     # parser = argparse.ArgumentParser()
