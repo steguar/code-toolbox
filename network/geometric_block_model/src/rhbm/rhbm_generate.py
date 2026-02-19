@@ -131,7 +131,7 @@ if __name__ == "__main__":
 # Programmatic interface for direct import (no subprocess required)
 # ============================================================================
 
-def run_rhbm_generate(args, logger=None):
+def run_rhbm_generate(N, avg_deg, gamma, n, bs_file, delta_file, rho, q, output_folder, beta, fast, iters, n_graphs, dump_p, logger):
     '''
     Direct-call interface that mirrors the CLI execution exactly.
     Does NOT modify any internal logic.
@@ -145,21 +145,6 @@ def run_rhbm_generate(args, logger=None):
         logger = logging.getLogger(__name__)
         logger.setLevel(logging.INFO)
 
-    # ---- Mirror CLI variable assignments ----
-    N = args.size
-    avg_deg = args.avgk
-    gamma = args.gamma
-    n = args.communities
-    bs_file = args.sizes
-    delta_file = args.delta
-    rho = args.assortativity
-    q = args.order_decay
-    output_folder = args.output
-    beta = args.beta
-    fast = args.fast
-    iters = args.n_runs
-    n_graphs = args.n_graphs
-    dump_p = args.dump_p
 
     # ---- Exact same logic as CLI ----
     block_sizes = get_block_sizes(bs_file, N, n, logger)
