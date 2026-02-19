@@ -64,8 +64,7 @@ if module == "Network generation":
         tmp_out = ensure_tmp_dir("rhbm_gen")
         start = time.time()
 
-        run_rhbm_generate(
-            N=N,
+        run_rhbm_generate(N=N,
             avg_deg=avgk,
             gamma=gamma,
             n=communities,
