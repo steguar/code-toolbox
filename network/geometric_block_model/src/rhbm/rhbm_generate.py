@@ -226,3 +226,75 @@ if __name__ == "__main__":
     end_time = time.time()
     logger.info(f"Total time for {iters} runs: {end_time - start_time:.2f} seconds.")
 
+
+
+# ============================================================================
+# Programmatic interface for direct import (no subprocess required)
+# ============================================================================
+
+def run_rhbm_generate_from_args(args, logger=None):
+    '''
+    Direct-call interface that mirrors the CLI execution exactly.
+    Does NOT modify any internal logic.
+    '''
+
+    import os
+    import time
+    import logging
+
+    if logger is None:
+        logger = logging.getLogger(__name__)
+        logger.setLevel(logging.INFO)
+
+    # ---- Mirror CLI variable assignments ----
+    N = args.size
+    avg_deg = args.avgk
+    gamma = args.gamma
+    n = args.communities
+    bs_file = args.sizes
+    delta_file = args.delta
+    rho = args.assortativity
+    q = args.order_decay
+    output_folder = args.output
+    beta = args.beta
+    fast = args.fast
+    iters = args.n_runs
+    n_graphs = args.n_graphs
+    dump_p = args.dump_p
+
+    # ---- Exact same logic as CLI ----
+    block_sizes = get_block_sizes(bs_file, N, n, logger)
+
+    if delta_file is None:
+        delta_matrix = generate_matrix(n, rho, q)
+    else:
+        delta_matrix = read_matrix(delta_file)
+        rho = None
+        q = None
+
+    adjust_features = not fast
+
+    if not os.path.exists(output_folder):
+        os.makedirs(output_folder, exist_ok=True)
+
+    with open(os.path.join(output_folder, 'info.csv'), 'w') as fout:
+        print('N,beta,gamma,k,n,rho,q,runs,n_graphs', file=fout)
+        print(f'{N},{beta},{gamma},{avg_deg},{n},{rho},{q},{iters},{n_graphs}', file=fout)
+
+    node_list = get_node_list(block_sizes)
+    save_data('node_list.txt', output_folder, node_list, fmt='%d')
+
+    start_time = time.time()
+
+    generate(
+        N, beta, avg_deg, gamma,
+        delta_matrix, block_sizes,
+        adjust_features, iters,
+        output_folder, dump_p, n_graphs,
+        logger=logger
+    )
+
+    end_time = time.time()
+    logger.info(f"Total time for {iters} runs: {end_time - start_time:.2f} seconds.")
+
+    return output_folder
