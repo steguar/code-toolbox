@@ -15,7 +15,11 @@ This model couples:
 
 All modeling assumptions are documented explicitly below.
 """
-
+import sys
+import os
+import shutil
+import pickle
+import datetime
 import json
 import numpy as np
 import networkx as nx
@@ -428,16 +432,38 @@ def plot_results(results):
 
 
 
-# ============================================================
-# MAIN
-# ============================================================
-
 if __name__ == "__main__":
 
-    config = load_config("config.json")
+
+    # 1. Get config path from command line arguments, default to "config.json"
+    config_path = sys.argv[1] if len(sys.argv) > 1 else "opinion/config.json"
+
+    # Load config and run simulation
+    config = load_config(config_path)
     sim = Simulation(config)
     results = sim.run()
 
+    # 2. Create a unique output folder using a timestamp
+    timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
+    output_dir = f"simulation_output_{timestamp}"
+    os.makedirs(output_dir, exist_ok=True)
+
+    # 3. Save a copy of the configuration file used
+    shutil.copy(config_path, os.path.join(output_dir, "config_used.json"))
+
+    # 4. Generate and save the plot in the new folder
     fig = plot_results(results)
+    
+    # Note: Swapped inner double quotes to single quotes to fix f-string syntax
+    plot_filename = f"opinions_alphaS_{config['opinion_dynamics']['alpha_social']}_alphaC_{config['opinion_dynamics']['alpha_community']}_external_type_{config['external_effect']['mode']}_alphaR_{config['external_effect']['alpha_R']}_mediabias_a_{config['media_bias']['a']}_mediabias_gthreshold_{config['media_bias']['g_threshold']}_risk_perception_delay_{config['risk_perception']['delay_steps']}_risk_perception_tau_{config['risk_perception']['tau']}.png"
+    plt.savefig(os.path.join(output_dir, plot_filename))
+
+    # 5. Save the 'results' variable as a pickle file
+    with open(os.path.join(output_dir, "results.pkl"), "wb") as f:
+        pickle.dump(results, f)
+
+    print(f"Simulation complete! All files saved to the '{output_dir}' directory.")
+    
+    # Optional: Keep this if you still want the plot to pop up on your screen when running
     plt.show()
 
