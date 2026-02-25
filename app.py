@@ -21,6 +21,9 @@ from multi_type_epidemic import MultiTypeEpidemic
 from opinion_dynamics import Simulation as OpinionSimulation, plot_results
 
 
+from noncompliance import page_noncompliance as ncp
+
+
 # -----------------------------------------------------------------------------
 # Helpers
 # -----------------------------------------------------------------------------
@@ -67,9 +70,10 @@ All models are configured via JSON files in the repository, but parameters can b
 """
 )
 
+MODULES = ["Network generation", "Epidemic model", "Opinion dynamics", "Noncompliance in cities"]
 module = st.sidebar.selectbox(
     "Select module",
-    ["Network generation", "Epidemic model", "Opinion dynamics"],
+    MODULES,
     index=0
 )
 
@@ -426,7 +430,7 @@ elif module == "Epidemic model":
 # =============================================================================
 # 3) OPINION DYNAMICS
 # =============================================================================
-else:
+elif module == MODULES[2]:
     st.header("Opinion dynamics model")
 
     cfg_path = BASE_DIR / "opinion" / "config.json"
@@ -503,3 +507,6 @@ else:
         results = sim.run()
         fig = plot_results(results)
         st.pyplot(fig, clear_figure=True)
+
+elif module == MODULES[3]: ###Cities non compliance
+    ncp.make_page(Path("noncompliance"))
