@@ -44,20 +44,23 @@ def make_page(base_path:Path|str = "."):
         st.session_state["tiles_parquet_vals"] = None
 
     st.header("Non-compliance calculation for cities")
-    st.markdown("Here are the parameters for selecting the data. Note that not every combination is proven to work"
+    st.markdown("This tool uses the electoral data from [this work](https://doi.org/10.1080/2474736X.2023.2185158) by Gabriele Pinto and " \
+                "combines it with the Vaccine Hesitancy Endorsement fit coefficients from [Paoletti et al., 2024](https://www.nature.com/articles/s41598-024-54863-7)"
+    )
+    st.markdown("To read more about how they are used, look at the [publication](https://doi.org/10.1098/rspa.2025.0511) by team members describing how it works.")
+    st.markdown("Below are the parameters for selecting the data. Note that not every combination is proven to work"
                 " (might be because of missing or incomplete data)")
     col1, col2 = st.columns(2)
 
 
-    with col1:
-        CITY = st.selectbox("City", CITIES)
-        PERIOD = st.selectbox("VHE coefficients period", [2,3,4], index=1)
-
-    with col2:
-        ANNO = st.selectbox("Year for electoral results", YEARS,index=1)
-        kind = st.selectbox("Precincts type", ["census","original"])
-
-    file_upload = st.file_uploader("Upload `tiles_data_pop.parq` from the population data folder in USN (e.g. usn/data/population/city)")
+    #with col1:
+    CITY = st.sidebar.selectbox("City", CITIES)
+    PERIOD = st.sidebar.selectbox("VHE coefficients period", [2,3,4], index=1)
+    ANNO = st.sidebar.selectbox("Year for electoral results", YEARS,index=1)
+        #kind = st.selectbox("Precincts type", ["census","original"])
+    kind = "census"
+    st.sidebar.markdown("Upload `tiles_data_pop.parq` from the population data folder in USN (e.g. usn/data/population/city) below:")
+    file_upload = st.sidebar.file_uploader("`tiles_data_pop.parq`")
     
     COMMON_NAME = f"{CITY}_year_{ANNO}_vheper_{PERIOD}_precincts_{kind}"
 
