@@ -1,0 +1,30 @@
+{
+    "node_file": "epidemic/input/node_list.txt",
+    "edge_file": "epidemic/input/edge_list_0_0.txt",
+
+    "T": 300,
+  
+    "beta": 0.05,
+    "gamma": 0.1,
+  
+    "sigma1": 0.6,
+    "sigma2": 0.3,
+  
+    "eta1": 0.01,
+    "eta2": 0.005,
+  
+    "initial_infected_fraction": 0.01,
+  
+    "vaccination_rates":
+    {
+      "0": 0.01,
+      "1": 0.02,
+      "2": 0.03,
+      "3": 0.0001,
+      "4": 0.002
+    },
+  
+    "plot": true,
+  
+    "plot_folder": "epidemic/output_vax"
+}

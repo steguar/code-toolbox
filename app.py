@@ -19,7 +19,7 @@ sys.path.append(str(BASE_DIR / "opinion"))
 
 from multi_type_epidemic import MultiTypeEpidemic
 from opinion_dynamics import Simulation as OpinionSimulation, plot_results
-
+from s3i2_simulator import run_simulation
 
 from noncompliance import page_noncompliance as ncp
 
@@ -70,7 +70,14 @@ All models are configured via JSON files in the repository, but parameters can b
 """
 )
 
-MODULES = ["Network generation", "Epidemic model", "Opinion dynamics"] #, "Noncompliance in cities"]
+MODULES = [
+    "Network generation",
+    "Multi-type epidemic",
+    "Opinion dynamics",
+    "S3I2 epidemic",
+    # "Noncompliance in cities"]
+]
+
 module = st.sidebar.selectbox(
     "Select module",
     MODULES,
@@ -318,7 +325,7 @@ This app packages the output folder as a **ZIP** for download.
 # =============================================================================
 # 2) EPIDEMIC MODEL
 # =============================================================================
-elif module == "Epidemic model":
+elif module == "Multi-type epidemic":
     st.header("Multi-type epidemic model (SIR / SIS with optional exposed stage)")
 
     cfg_path = BASE_DIR / "epidemic" / "config.json"
@@ -506,6 +513,14 @@ elif module == MODULES[2]:
         sim = OpinionSimulation(config)
         results = sim.run()
         fig = plot_results(results)
+        st.pyplot(fig, clear_figure=True)
+
+elif module == "S3I2 epidemic":
+
+    config = load_json(BASE_DIR / "epidemic" / "config_vax.json")
+
+    if st.button("Run simulation"):
+        history, history_com, fig = run_simulation(config)
         st.pyplot(fig, clear_figure=True)
 
 # elif module == MODULES[3]: ###Cities non compliance
