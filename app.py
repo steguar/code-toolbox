@@ -70,7 +70,7 @@ All models are configured via JSON files in the repository, but parameters can b
 """
 )
 
-MODULES = ["Network generation", "Epidemic model", "Opinion dynamics", "Noncompliance in cities"]
+MODULES = ["Network generation", "Epidemic model", "Opinion dynamics"] #, "Noncompliance in cities"]
 module = st.sidebar.selectbox(
     "Select module",
     MODULES,
@@ -508,5 +508,5 @@ elif module == MODULES[2]:
         fig = plot_results(results)
         st.pyplot(fig, clear_figure=True)
 
-elif module == MODULES[3]: ###Cities non compliance
-    ncp.make_page(Path("noncompliance"))
+# elif module == MODULES[3]: ###Cities non compliance
+#     ncp.make_page(Path("noncompliance"))

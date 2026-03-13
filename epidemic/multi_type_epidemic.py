@@ -693,7 +693,7 @@ class MultiTypeEpidemic:
 # ============================================================
 
 if __name__ == "__main__":
-    cfg = load_config("config.json")
+    cfg = load_config("epidemic/config.json")
     model = MultiTypeEpidemic(cfg)
     res = model.run()
     fig = MultiTypeEpidemic.plot_results(res)
